@@ -1,0 +1,208 @@
+// ==UserScript==
+// @name         MyEnglishLab Answer Button
+// @version      2.1
+// @description  Add an answer button
+// @author       Chu Tuan Vu
+// @match        https://myenglishlab.pearson-intl.com/activities/*
+// @icon         https://www.google.com/s2/favicons?domain=myenglishlab.pearson-intl.com
+// @updateURL    https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/main/myEnglishLab.user.js
+// @downloadURL  https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/main/myEnglishLab.user.js
+// ==/UserScript==
+
+(function () {
+    'use strict';
+    const answer = document.createElement('li');
+    answer.innerHTML = '<a id="answer" class="button" href="#" role="button">Show answer</a>';
+    const navigationButtons = document.querySelector('.navigation__buttons ul');
+    const submitButton = document.querySelector('#submitButton');
+    navigationButtons.insertBefore(answer, submitButton.parentElement);
+
+    const unit = document.getElementsByClassName("product_design_unit taskUnit")[0]?.textContent.trim();
+    const activity = document.getElementsByClassName("product_design_activity_section")[0]?.textContent.trim();
+
+    let answerData = null;
+    document.getElementById('answer').addEventListener('click', function (event) {
+        event.preventDefault();
+        const cached = sessionStorage.getItem('cached');
+        function processActivity(data) {
+            const unitData = data.record.find((item) => item.unit === unit);
+            const activityData = unitData?.activities.find((item) => item.activity === activity);
+            if (unitData && activityData) {
+                answerData = activityData;
+                const keys = {
+                    matching,
+                    multipleChoice,
+                    wordsearch,
+                    essay,
+                    draggableJumbledWords,
+                    singleUnderline,
+                    multipleUnderline,
+                    insertAWord,
+                    hangman,
+                    positionalDragAndDrop,
+                    inlineDropDown,
+                    firstLetterFillin,
+                    dragAndDropCategorisation,
+                    dragAndDrop,
+                    singleChoice,
+                    crossword,
+                    fillin
+                };
+                Object.keys(keys).forEach(id => {
+                    const elements = document.querySelectorAll(`.${id}`);
+                    if (elements.length > 0) {
+                        keys[id]();
+                    }
+                });
+            } else {
+                alert("Không ổn rồi đại vương ơi 😟.\nHiện tại chưa có đáp án cho bài tập này! 😥");
+            }
+        }
+        if (cached) {
+            const data = JSON.parse(cached);
+            processActivity(data);
+        } else {
+            let accessKey = prompt("Vui lòng nhập key:");
+            if (accessKey) {
+                fetch("https://api.jsonbin.io/v3/b/66ed8792ad19ca34f8a99ce0", {
+                    headers: {
+                        'X-Access-Key': accessKey
+                    }
+                }).then((response) => {
+                    if (!response.ok) {
+                        alert('Key không hợp lệ.');
+                        return;
+                    }
+                    return response.json();
+                }).then((data) => {
+                    if (data) {
+                        sessionStorage.setItem('cached', JSON.stringify(data));
+                        processActivity(data);
+                    }
+                })
+            }
+        }
+    });
+
+    function draggableJumbledWords() {
+        const queryElements = document.querySelectorAll('.droppableWrapper')
+        answerData.answer.forEach((Array, index) => {
+            const targetDiv = queryElements[index];
+            Array.forEach(item => {
+                const targetElement = document.querySelector(`div[value="${item}"]`);
+                targetDiv.appendChild(targetElement);
+            })
+        });
+    }
+    function multipleUnderline() {
+        singleUnderline();
+    }
+    function singleUnderline() {
+        const queryElements = document.querySelectorAll('span');
+        const queryElementsFt = Array.from(queryElements).filter(span => {
+            const input = span.querySelector('input');
+            return input && answerData.answer.includes(input.value);
+        });
+        queryElementsFt.forEach(id => {
+            id.click()
+        });
+    }
+    function insertAWord() {
+        const queryElements = document.querySelectorAll('span');
+        const queryElementsFt = Array.from(queryElements).filter(span =>
+            /\(.*\)/.test(span.textContent)
+        );
+        const answer = queryElementsFt.map(span =>
+            span.textContent.replace(/[()]/g, '')
+        );
+        answerData.answer.forEach((id, index) => {
+            const queryElements = document.getElementById(id)
+            queryElements.value = answer[index]
+            queryElements.style.display = 'inline-block';
+        })
+    }
+    function inlineDropDown() {
+        const queryElements = document.querySelectorAll('.activity-select');
+        const queryElementsFt = Array.from(queryElements).filter(element => !element.hasAttribute('disabled'));
+        queryElementsFt.forEach((id, index) => {
+            id.value = answerData.answer[index]
+        });
+    }
+    function firstLetterFillin() {
+        const queryElements = document.querySelectorAll('.normalWidth');
+        const queryElementsFt = Array.from(queryElements).filter(element => !element.hasAttribute('disabled'));
+        queryElementsFt.forEach((id, index) => {
+            id.value = answerData.answer[index]
+        });
+    }
+    function dragAndDropCategorisation() {
+        const queryElements = document.querySelectorAll(".boxBody");
+        const queryElementsFt = Array.from(queryElements).filter(element => !element.hasAttribute('disabled'));
+        answerData.answer.forEach((id, index) => {
+            if (id.trim() !== "") {
+                const element = document.querySelector(`[data-id='${id}']`);
+                if (element) {
+                    queryElementsFt[index % queryElementsFt.length].appendChild(element);
+                }
+            }
+        });
+    }
+    function positionalDragAndDrop() {
+        dragAndDrop()
+    }
+    function dragAndDrop() {
+        const queryElements = document.querySelectorAll('div.drop:not(.example)');
+        queryElements.forEach((id, index) => {
+            id.appendChild(document.querySelector(`[data-id='${answerData.answer[index]}']`));
+        });
+    }
+    function singleChoice() {
+        answerData.answer.forEach((value) => {
+            document.querySelector(`input[value="${value}"]`).checked = true;
+        })
+    };
+    function multipleChoice() {
+        singleChoice();
+    }
+    function hangman() {
+        const queryElements = document.querySelectorAll('input[autocorrect^="off"]');
+        const queryElementsFt = Array.from(queryElements).filter(element =>
+            !element.hasAttribute('disabled') && !element.classList.contains('filled')
+        ); queryElementsFt.forEach((id, index) => {
+            id.value = answerData.answer[index];
+        });
+    }
+    function crossword() {
+        const queryElements = document.querySelectorAll('input[class^="response-RESPONSE_"]');
+        const queryElementsFt = Array.from(queryElements).filter(element => !element.classList.contains('example'));
+        queryElementsFt.forEach((id, index) => {
+            id.value = answerData.answer[index];
+        });
+    }
+    function fillin() {
+        const queryElements = document.querySelectorAll('.superwideWidth, .wideWidth, .normalWidth,.narrowWidth');
+        const queryElementsFt = Array.from(queryElements).filter(element => !element.hasAttribute('disabled'));
+        queryElementsFt.forEach((id, index) => {
+            id.value = answerData.answer[index];
+        });
+    }
+    function essay() {
+        alert("Bài này văn mẫu nhé đại vương.\nNếu được đại vương tự viết nhé ❤️")
+        const queryElements = document.querySelectorAll('textarea')
+        queryElements.forEach((id, index) => {
+            id.value = answerData.answer[index]
+        })
+    }
+    function wordsearch() {
+        answerData.answer.forEach((id) => {
+            const queryElements = document.getElementById(id)
+            queryElements.click();
+        })
+    }
+    function matching() {
+        const queryElements = answerData.answer.map(id => document.getElementById(id))
+        queryElements.forEach((element) => {
+            element.click();
+        })
+    }
+})();
