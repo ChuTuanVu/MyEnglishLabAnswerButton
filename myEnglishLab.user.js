@@ -23,7 +23,7 @@
     let answerData = null;
     document.getElementById('answer').addEventListener('click', function (event) {
         event.preventDefault();
-        const cached = sessionStorage.getItem('cached');
+        const cached = localStorage.getItem('cached');
         function processActivity(data) {
             const unitData = data.record.find((item) => item.unit === unit);
             const activityData = unitData?.activities.find((item) => item.activity === activity);
@@ -76,7 +76,7 @@
                     return response.json();
                 }).then((data) => {
                     if (data) {
-                        sessionStorage.setItem('cached', JSON.stringify(data));
+                        localStorage.setItem('cached', JSON.stringify(data));
                         processActivity(data);
                     }
                 })
