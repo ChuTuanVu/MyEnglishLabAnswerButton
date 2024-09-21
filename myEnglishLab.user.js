@@ -64,7 +64,7 @@
         } else {
             let accessKey = prompt("Vui lòng nhập key:");
             if (accessKey) {
-                fetch("https://api.jsonbin.io/v3/b/66ed8792ad19ca34f8a99ce0", {
+                fetch("https://api.jsonbin.io/v3/b/66ee3797acd3cb34a8885ea5", {
                     headers: {
                         'X-Access-Key': accessKey
                     }
