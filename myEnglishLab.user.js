@@ -18,13 +18,23 @@
   const submitButton = document.querySelector("#submitButton");
   navigationButtons.insertBefore(answer, submitButton.parentElement);
 
-  const unit = document
+  let unit = document
     .getElementsByClassName("product_design_unit taskUnit")[0]
     ?.textContent.trim();
   const activity = document
     .getElementsByClassName("product_design_activity_section")[0]
     ?.textContent.trim();
-
+  const fDev = [
+    "Exercise 3",
+    "Exercise 4A",
+    "Exercise 4B",
+    "Exercise 5",
+    "Exercise 6A",
+    "Exercise 6B",
+  ];
+  if (fDev.includes(activity) && !unit) {
+    unit = "1.2";
+  }
   let answerData = null;
   document.getElementById("answer").addEventListener("click", function (event) {
     event.preventDefault();
