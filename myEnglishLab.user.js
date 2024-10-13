@@ -95,9 +95,7 @@
       } else if (ver || ver == "ta") {
         verta = "https://api.jsonbin.io/v3/b/66ee3797acd3cb34a8885ea5";
       }
-      let key = prompt(
-        "Vui lòng nhập key:\nSinh viên UTEHY? : Liên hệ tôi: chutuanvu0206"
-      );
+      let key = prompt("Vui lòng nhập key:");
       if (key) {
         fetch(verta, {
           headers: {
