@@ -70,11 +70,13 @@
       processActivity(data);
     } else {
       let ver = prompt(
-        "Chọn môn học (Nhập chính xác): \n tatc cho Tiếng anh tăng cường hoặc ta cho Tiếng anh 1,2,3"
+        "Chọn môn học:\ntatc: Tiếng anh tăng cường\nta: Tiếng anh 1,2,3"
       );
       let verta = "";
       if (ver || ver == "tatc") {
-        let untatc = prompt("Chọn unit:\n 1 đến 6 nhập 1; 7 đến 12 nhập 2");
+        let untatc = prompt(
+          "Chọn unit:\n1: Unit 1 đến unit 6\n2: Unit 7 đến unit 12"
+        );
         if (untatc || untatc == "1") {
           verta = "https://api.jsonbin.io/v3/b/670a8615ad19ca34f8b73234";
         } else if (untatc || untatc == "2") {
@@ -83,7 +85,9 @@
       } else if (ver || ver == "ta") {
         verta = "https://api.jsonbin.io/v3/b/66ee3797acd3cb34a8885ea5";
       }
-      let key = prompt("Vui lòng nhập key:");
+      let key = prompt(
+        "Vui lòng nhập key:\nSinh viên UTEHY? : Liên hệ tôi: chutuanvu0206"
+      );
       if (key) {
         fetch(verta, {
           headers: {
@@ -231,7 +235,9 @@
     });
   }
   function essay() {
-    alert("Bài này văn mẫu.\nNếu được tự viết nhé ❤️");
+    alert(
+      "Bài này văn mẫu đấy.\nNếu được tự viết nhé 😉 (from VuChu with love ❤️)"
+    );
     const queryElements = document.querySelectorAll("textarea");
     queryElements.forEach((id, index) => {
       id.value = answerData.answer[index];
