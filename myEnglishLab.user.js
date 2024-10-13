@@ -72,7 +72,7 @@
           }
         });
       } else {
-        alert("Hiện tại chưa có đáp án cho bài tập này! 😥");
+        alert("Hiện chưa có đáp án cho bài tập này! 😥");
       }
     }
     if (cached) {
@@ -83,16 +83,18 @@
         "Chọn môn học:\ntatc: Tiếng anh tăng cường\nta: Tiếng anh 1,2,3"
       );
       let verta = "";
-      if (ver || ver == "tatc") {
-        let untatc = prompt(
+      let untatc = "";
+
+      if (ver == "tatc") {
+        untatc = prompt(
           "Chọn unit:\n1: Unit 1 đến unit 6\n2: Unit 7 đến unit 12"
         );
-        if (untatc || untatc == "1") {
+        if (untatc == "1") {
           verta = "https://api.jsonbin.io/v3/b/670a8615ad19ca34f8b73234";
-        } else if (untatc || untatc == "2") {
+        } else if (untatc == "2") {
           verta = "https://api.jsonbin.io/v3/b/670a862bacd3cb34a895a80b";
         }
-      } else if (ver || ver == "ta") {
+      } else if (ver == "ta") {
         verta = "https://api.jsonbin.io/v3/b/66ee3797acd3cb34a8885ea5";
       }
       let key = prompt("Vui lòng nhập key:");
