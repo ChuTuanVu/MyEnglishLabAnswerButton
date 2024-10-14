@@ -53,6 +53,7 @@
       if (unitData && activityData) {
         answerData = activityData;
         const keys = {
+          fillin,
           matching,
           multipleChoice,
           wordsearch,
@@ -69,7 +70,6 @@
           dragAndDrop,
           singleChoice,
           crossword,
-          fillin,
         };
         Object.keys(keys).forEach((id) => {
           const elements = document.querySelectorAll(`.${id}`);
