@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyEnglishLab Answer Button
-// @version      2.3
+// @version      2.4
 // @description  Add an answer button
 // @author       Chu Tuan Vu
 // @match        https://myenglishlab.pearson-intl.com/activities/*
@@ -271,13 +271,18 @@
   }
   function fillin() {
     const queryElements = document.querySelectorAll(
-      ".superwideWidth, .wideWidth, .normalWidth,.narrowWidth"
+      ".superwideWidth, .wideWidth, .normalWidth, .narrowWidth"
     );
     const queryElementsFt = Array.from(queryElements).filter(
       (element) => !element.hasAttribute("disabled")
     );
+    const AnswersFt = answerData.answer.filter(
+      (value) =>
+        !/^i_\d+--underline--\d+$/.test(value) &&
+        !/^i_\d+_RESPONSE_(left|right)_i_\d+--matching--\d+$/.test(value)
+    );
     queryElementsFt.forEach((id, index) => {
-      id.value = answerData.answer[index];
+      id.value = AnswersFt[index];
     });
   }
   function essay() {
