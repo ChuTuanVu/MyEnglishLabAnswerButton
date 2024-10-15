@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyEnglishLab Answer Button
-// @version      2.4
+// @version      2.5
 // @description  Add an answer button
 // @author       Chu Tuan Vu
 // @match        https://myenglishlab.pearson-intl.com/activities/*
@@ -90,7 +90,6 @@
       );
       let verta = "";
       let untatc = "";
-
       if (ver == "tatc") {
         untatc = prompt(
           "Chọn unit:\n1: Unit 1 đến unit 6\n2: Unit 7 đến unit 12"
@@ -104,55 +103,52 @@
         verta = "https://api.jsonbin.io/v3/b/66ee3797acd3cb34a8885ea5";
       }
       if (ver && verta) {
-        fetch("https://api.ipify.org/?format=json")
-          .then((response) => response.json())
-          .then((data) => {
-            const ip = data.ip;
-            return fetch(
-              `https://api.airtable.com/v0/appkzsY0wGr47oUqa/MyEnglishLab`,
-              {
-                method: "POST",
-                headers: {
-                  Authorization: `Bearer pat6VkxBrIGDyGXKc.5924e5c16e6fc0e6091c563de1e3d8d3df0f75695f3b67af763c6f3f01db5b9c`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  records: [
-                    {
-                      fields: {
-                        ip: ip,
-                        time: new Date().toLocaleString(),
-                      },
-                    },
-                  ],
-                }),
-              }
-            );
+        let key = prompt("Liên hệ: chutuanvu0206\nVui lòng nhập key:");
+        if (key) {
+          fetch(verta, {
+            headers: {
+              "X-Access-Key": key,
+            },
           })
-          .then((response) => response.json())
-          .then(() => {
-            let key = prompt("Liên hệ: chutuanvu0206\nVui lòng nhập key:");
-            if (key) {
-              fetch(verta, {
-                headers: {
-                  "X-Access-Key": key,
-                },
-              })
-                .then((response) => {
-                  if (!response.ok) {
-                    alert("Key không hợp lệ.");
-                    return;
-                  }
-                  return response.json();
-                })
-                .then((data) => {
-                  if (data) {
-                    sessionStorage.setItem("cached", JSON.stringify(data));
-                    processActivity(data);
-                  }
-                });
-            }
-          });
+            .then((response) => {
+              if (!response.ok) {
+                alert("Key không hợp lệ.");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              if (data) {
+                sessionStorage.setItem("cached", JSON.stringify(data));
+                processActivity(data);
+                fetch("https://api.ipify.org/?format=json")
+                  .then((response) => response.json())
+                  .then((data) => {
+                    const ip = data.ip;
+                    return fetch(
+                      `https://api.airtable.com/v0/appkzsY0wGr47oUqa/MyEnglishLab`,
+                      {
+                        method: "POST",
+                        headers: {
+                          Authorization: `Bearer pat6VkxBrIGDyGXKc.5924e5c16e6fc0e6091c563de1e3d8d3df0f75695f3b67af763c6f3f01db5b9c`,
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                          records: [
+                            {
+                              fields: {
+                                ip: ip,
+                                time: new Date().toLocaleString(),
+                              },
+                            },
+                          ],
+                        }),
+                      }
+                    );
+                  })
+                  .then((response) => response.json());
+              }
+            });
+        }
       }
     }
   });
