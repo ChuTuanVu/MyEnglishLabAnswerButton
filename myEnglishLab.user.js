@@ -250,8 +250,12 @@
         !element.hasAttribute("disabled") &&
         !element.classList.contains("filled")
     );
+    const AnswerFt = answerData.answer.filter(
+      (value) => !/^i_\d+--inline_choice--\d+$/.test(value)
+    );
+
     queryElementsFt.forEach((id, index) => {
-      id.value = answerData.answer[index];
+      id.value = AnswerFt[index];
     });
   }
   function crossword() {
