@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyEnglishLab Answer Button
-// @version      2.5
+// @version      2.6
 // @description  Add an answer button
 // @author       Chu Tuan Vu
 // @match        https://myenglishlab.pearson-intl.com/activities/*
@@ -88,24 +88,28 @@
       let ver = prompt(
         "Chọn môn học:\ntatc: Tiếng anh tăng cường\nta: Tiếng anh 1,2,3"
       );
-      let verta = "";
-      let untatc = "";
+      let unitTa = "";
+      let unitChoice = prompt(
+        "Chọn unit:\n1: Unit 1 đến unit 6\n2: Unit 7 đến unit 12"
+      );
+
       if (ver == "tatc") {
-        untatc = prompt(
-          "Chọn unit:\n1: Unit 1 đến unit 6\n2: Unit 7 đến unit 12"
-        );
-        if (untatc == "1") {
-          verta = "https://api.jsonbin.io/v3/b/670a8615ad19ca34f8b73234";
-        } else if (untatc == "2") {
-          verta = "https://api.jsonbin.io/v3/b/670a862bacd3cb34a895a80b";
+        if (unitChoice == "1") {
+          unitTa = "https://api.jsonbin.io/v3/b/672239cdacd3cb34a89f8844";
+        } else if (unitChoice == "2") {
+          unitTa = "https://api.jsonbin.io/v3/b/67223e04ad19ca34f8c112e9";
         }
       } else if (ver == "ta") {
-        verta = "https://api.jsonbin.io/v3/b/66ee3797acd3cb34a8885ea5";
+        if (unitChoice == "1") {
+          unitTa = "https://api.jsonbin.io/v3/b/67223e6facd3cb34a89f8a58";
+        } else if (unitChoice == "2") {
+          unitTa = "https://api.jsonbin.io/v3/b/67223e84e41b4d34e44b543e";
+        }
       }
-      if (ver && verta) {
+      if (ver && unitTa) {
         let key = prompt("Liên hệ: chutuanvu0206\nVui lòng nhập key:");
         if (key) {
-          fetch(verta, {
+          fetch(unitTa, {
             headers: {
               "X-Access-Key": key,
             },
