@@ -31,4 +31,4 @@ To install the script, click the following link:
 
 Want to automate your assignments? Install this additional script:
 
-### [Install the script](https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/refs/heads/main/myEnglishLab.user.auto.js)
+### [Install the script](https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/refs/heads/main/myEnglishLabAuto.user.js)
