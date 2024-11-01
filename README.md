@@ -2,7 +2,7 @@
 
 ## Description
 
-Adding an answer button to MyEnglishLab.
+Add an answer button to MyEnglishLab.
 
 ### Before:
 
@@ -28,3 +28,7 @@ See more: [Chrome for Developers article](https://developer.chrome.com/docs/exte
 To install the script, click the following link:
 
 ### [Install the script](https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/refs/heads/main/myEnglishLab.user.js)
+
+Want to automate your assignments? Install this additional script:
+
+### [Install the script](https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/refs/heads/main/myEnglishLab.user.auto.js)
