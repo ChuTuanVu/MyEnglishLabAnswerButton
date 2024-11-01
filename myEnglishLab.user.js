@@ -181,18 +181,27 @@
     });
   }
   function insertAWord() {
-    const queryElements = document.querySelectorAll("span");
-    const queryElementsFt = Array.from(queryElements).filter((span) =>
-      /\(.*\)/.test(span.textContent)
-    );
-    const answer = queryElementsFt.map((span) =>
-      span.textContent.replace(/[()]/g, "")
-    );
-    answerData.answer.forEach((id, index) => {
-      const queryElements = document.getElementById(id);
-      queryElements.value = answer[index];
-      queryElements.style.display = "inline-block";
-    });
+    if (unit == "4.1" && activity == "Exercise 5A") {
+      answerData.forEach((id) => {
+        const input = document.getElementById(id);
+        if (input) {
+          input.value += ",";
+        }
+      });
+    } else {
+      const queryElements = document.querySelectorAll("span");
+      const queryElementsFt = Array.from(queryElements).filter((span) =>
+        /\(.*\)/.test(span.textContent)
+      );
+      const answer = queryElementsFt.map((span) =>
+        span.textContent.replace(/[()]/g, "")
+      );
+      answerData.answer.forEach((id, index) => {
+        const queryElements = document.getElementById(id);
+        queryElements.value = answer[index];
+        queryElements.style.display = "inline-block";
+      });
+    }
   }
   function inlineDropDown() {
     const queryElements = document.querySelectorAll(".activity-select");
