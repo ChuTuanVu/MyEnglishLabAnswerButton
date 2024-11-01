@@ -5,8 +5,8 @@
 // @author       Chu Tuan Vu
 // @match        https://myenglishlab.pearson-intl.com/activities/*
 // @icon         https://www.google.com/s2/favicons?domain=myenglishlab.pearson-intl.com
-// @updateURL    https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/main/myEnglishLab.user.auto.js
-// @downloadURL  https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/main/myEnglishLab.user.auto.js
+// @updateURL    https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/main/myEnglishLabAuto.user.js
+// @downloadURL  https://github.com/ChuTuanVu/MyEnglishLabAnswerButton/raw/main/myEnglishLabAuto.user.js
 // ==/UserScript==
 
 (function () {
