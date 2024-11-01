@@ -182,11 +182,10 @@
   }
   function insertAWord() {
     if (unit == "4.1" && activity == "Exercise 5A") {
-      answerData.forEach((id) => {
+      answerData.answer.forEach((id) => {
         const input = document.getElementById(id);
-        if (input) {
-          input.value += ",";
-        }
+        input.value += ",";
+        input.style.display = "inline-block";
       });
     } else {
       const queryElements = document.querySelectorAll("span");
