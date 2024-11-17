@@ -11,20 +11,26 @@
 
 (function () {
   "use strict";
-  window.onload = () => {
-    const answerButton = document.getElementById("answer");
-    const submitButton = document.getElementById("submitButton");
-    const nextButton = document.getElementById("next");
-    if (answerButton) {
-      answerButton.click();
-    }
-    setTimeout(() => {
-      if (submitButton) {
-        submitButton.click();
+  setInterval(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      let a = false;
+      let b = false;
+      let c = false;
+      const d = document.getElementById("answer");
+      const e = document.getElementById("submitButton");
+      const f = document.getElementById("next");
+      if (d && !a) {
+        d.click();
+        a = true;
       }
-    }, 1000);
-    if (nextButton) {
-      nextButton.click();
-    }
-  };
+      if (e && !b) {
+        e.click();
+        b = true;
+      }
+      if (f && !c) {
+        f.click();
+        c = true;
+      }
+    });
+  }, 1000);
 })();
