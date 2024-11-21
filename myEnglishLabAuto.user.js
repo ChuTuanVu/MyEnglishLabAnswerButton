@@ -11,25 +11,29 @@
 
 (function () {
   "use strict";
-  let a = false;
-  let b = false;
-  let c = false;
-  setInterval(() => {
-    const d = document.getElementById("answer");
-    const e = document.getElementById("submitButton");
-    const f = document.getElementById("next");
+  let answerFlag = false;
+  let submitFlag = false;
+  let nextFlag = false;
+  function a() {
+    const answer = document.getElementById("answer");
+    const submit = document.getElementById("submitButton");
+    const next = document.getElementById("next");
 
-    if (d && !a) {
-      d.click();
-      a = true;
+    if (answer && !answerFlag) {
+      answer.click();
+      answerFlag = true;
     }
-    if (e && a && !b) {
-      e.click();
-      b = true;
+    if (submit && answerFlag && !submitFlag) {
+      submit.click();
+      submitFlag = true;
     }
-    if (f && b && !c) {
-      f.click();
-      c = true;
+    if (next && !nextFlag) {
+      next.click();
+      nextFlag = true;
     }
-  }, 1000);
+    if (!answerFlag || !submitFlag || !nextFlag) {
+      requestAnimationFrame(a);
+    }
+  }
+  a();
 })();
