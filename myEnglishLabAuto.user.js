@@ -11,26 +11,25 @@
 
 (function () {
   "use strict";
+  let a = false;
+  let b = false;
+  let c = false;
   setInterval(() => {
-    document.addEventListener("DOMContentLoaded", () => {
-      let a = false;
-      let b = false;
-      let c = false;
-      const d = document.getElementById("answer");
-      const e = document.getElementById("submitButton");
-      const f = document.getElementById("next");
-      if (d && !a) {
-        d.click();
-        a = true;
-      }
-      if (e && !b) {
-        e.click();
-        b = true;
-      }
-      if (f && !c) {
-        f.click();
-        c = true;
-      }
-    });
+    const d = document.getElementById("answer");
+    const e = document.getElementById("submitButton");
+    const f = document.getElementById("next");
+
+    if (d && !a) {
+      d.click();
+      a = true;
+    }
+    if (e && a && !b) {
+      e.click();
+      b = true;
+    }
+    if (f && b && !c) {
+      f.click();
+      c = true;
+    }
   }, 1000);
 })();
