@@ -324,6 +324,13 @@
       i.preventDefault();
       i.stopPropagation();
     });
-    history.back();
+    const exit = document.getElementById("exit");
+    exit.click();
+    const button = document.querySelectorAll(".ui-dialog-buttonset button");
+    button.forEach((i) => {
+      if (i.textContent.trim() == "Yes") {
+        i.click();
+      }
+    });
   }
 })();
