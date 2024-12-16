@@ -70,6 +70,7 @@
           dragAndDrop,
           singleChoice,
           crossword,
+          audiosubmit,
         };
         Object.keys(keys).forEach((id) => {
           const elements = document.querySelectorAll(`.${id}`);
@@ -298,9 +299,6 @@
     });
   }
   function essay() {
-    alert(
-      "Bài này văn mẫu đấy.\nNếu được tự viết nhé 😉 (from VuChu with love ❤️)"
-    );
     const queryElements = document.querySelectorAll("textarea");
     queryElements.forEach((id, index) => {
       id.value = answerData.answer[index];
@@ -319,5 +317,13 @@
     queryElements.forEach((element) => {
       element.click();
     });
+  }
+  function audiosubmit() {
+    const submit = document.getElementById("submitButton");
+    submit.addEventListener("click", (i) => {
+      i.preventDefault();
+      i.stopPropagation();
+    });
+    history.back();
   }
 })();
