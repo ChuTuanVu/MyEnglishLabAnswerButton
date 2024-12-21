@@ -11,29 +11,31 @@
 
 (function () {
   "use strict";
-  let answerFlag = false;
-  let submitFlag = false;
-  let nextFlag = false;
-  function a() {
+  window.onload = function () {
+    let answerFlag = false;
+    let submitFlag = false;
+    let nextFlag = false;
+
     const answer = document.getElementById("answer");
     const submit = document.getElementById("submitButton");
     const next = document.getElementById("next");
-
-    if (answer && !answerFlag) {
-      answer.click();
-      answerFlag = true;
+    function loop() {
+      if (answer && !answerFlag) {
+        answer.click();
+        answerFlag = true;
+      }
+      if (submit && !submitFlag) {
+        submit.click();
+        submitFlag = true;
+      }
+      if (next && !nextFlag) {
+        next.click();
+        nextFlag = true;
+      }
+      if (!answerFlag || !submitFlag || !nextFlag) {
+        setTimeout(loop, 100);
+      }
     }
-    if (submit && answerFlag && !submitFlag) {
-      submit.click();
-      submitFlag = true;
-    }
-    if (next && !nextFlag) {
-      next.click();
-      nextFlag = true;
-    }
-    if (!answerFlag || !submitFlag || !nextFlag) {
-      requestAnimationFrame(a);
-    }
-  }
-  a();
+    loop();
+  };
 })();
