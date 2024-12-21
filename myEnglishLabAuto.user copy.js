@@ -11,12 +11,16 @@
 
 (function () {
   "use strict";
+  let homepageFlag = false;
+  let notstartedFlag = false;
   const homepage = document.getElementById("menu-homepage")
   const notstarted = document.querySelector('button[data-id="header-state-filter-id--not-started"]');
-  if (homepage) {
+  if (homepage && !homepageFlag) {
     homepage.click();
+    homepageFlag = true;
   }
-  if (notstarted) {
+  if (notstarted && !notstartedFlag) {
     notstarted.click();
+    notstartedFlag = true;
   }
 })();
