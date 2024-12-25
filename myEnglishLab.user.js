@@ -125,32 +125,6 @@
               if (data) {
                 sessionStorage.setItem("cached", JSON.stringify(data));
                 processActivity(data);
-                fetch("https://api.ipify.org/?format=json")
-                  .then((response) => response.json())
-                  .then((data) => {
-                    const ip = data.ip;
-                    return fetch(
-                      `https://api.airtable.com/v0/appkzsY0wGr47oUqa/MyEnglishLab`,
-                      {
-                        method: "POST",
-                        headers: {
-                          Authorization: `Bearer pat6VkxBrIGDyGXKc.5924e5c16e6fc0e6091c563de1e3d8d3df0f75695f3b67af763c6f3f01db5b9c`,
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                          records: [
-                            {
-                              fields: {
-                                ip: ip,
-                                time: new Date().toLocaleString(),
-                              },
-                            },
-                          ],
-                        }),
-                      }
-                    );
-                  })
-                  .then((response) => response.json());
               }
             });
         }
