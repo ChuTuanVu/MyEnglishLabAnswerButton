@@ -14,11 +14,24 @@
   const answer = document.createElement("li");
   answer.innerHTML =
     '<a id="answer" class="button" href="#" role="button">Show answer</a>';
-  const navigationButtons = document.querySelector(".navigation__buttons ul");
-  const submitButton = document.querySelector("#submitButton");
-  navigationButtons.insertBefore(answer, submitButton.parentElement);
+  document
+    .querySelector(".navigation__buttons ul")
+    .insertBefore(
+      answer,
+      document.querySelector("#submitButton").parentElement
+    );
+  answer.addEventListener("click", async function (event) {
+    event.preventDefault();
+    const cached = sessionStorage.getItem("cached");
 
-  let unit = document
+    if (cached) {
+      processActivity(JSON.parse(cached));
+    } else {
+      await fetchAndProcessData();
+    }
+  });
+
+  const unit = document
     .getElementsByClassName("product_design_unit taskUnit")[0]
     ?.textContent.trim();
   const activity = document
@@ -36,101 +49,75 @@
     "Exercise 6A",
     "Exercise 6B",
   ];
+
   if (fDev.includes(activity) && !unit && activity_desc == "Reading") {
     unit = "1.1";
   } else if (fDev.includes(activity) && !unit) {
     unit = "1.2";
   }
-  let answerData = null;
-  document.getElementById("answer").addEventListener("click", function (event) {
-    event.preventDefault();
-    const cached = sessionStorage.getItem("cached");
-    function processActivity(data) {
-      const unitData = data.record.find((item) => item.unit === unit);
-      const activityData = unitData?.activities.find(
-        (item) => item.activity === activity
-      );
-      if (unitData && activityData) {
-        answerData = activityData;
-        const keys = {
-          fillin,
-          matching,
-          multipleChoice,
-          wordsearch,
-          essay,
-          draggableJumbledWords,
-          singleUnderline,
-          multipleUnderline,
-          insertAWord,
-          hangman,
-          positionalDragAndDrop,
-          inlineDropDown,
-          firstLetterFillin,
-          dragAndDropCategorisation,
-          dragAndDrop,
-          singleChoice,
-          crossword,
-          audiosubmit,
-        };
-        Object.keys(keys).forEach((id) => {
-          const elements = document.querySelectorAll(`.${id}`);
-          if (elements.length > 0) {
-            keys[id]();
-          }
-        });
-      } else {
-        alert("Hiện chưa có đáp án cho bài tập này! 😥");
-      }
-    }
-    if (cached) {
-      const data = JSON.parse(cached);
-      processActivity(data);
-    } else {
-      let ver = prompt(
-        "Chọn môn học:\ntatc: Tiếng anh tăng cường\nta: Tiếng anh 1,2,3"
-      );
-      let unitTa = "";
-      let unitChoice = prompt(
-        "Chọn unit:\n1: Unit 1 đến unit 6\n2: Unit 7 đến unit 12"
-      );
 
-      if (ver == "tatc") {
-        if (unitChoice == "1") {
-          unitTa = "https://api.jsonbin.io/v3/b/67335e43acd3cb34a8a76a66";
-        } else if (unitChoice == "2") {
-          unitTa = "https://api.jsonbin.io/v3/b/672490faacd3cb34a8a08744";
-        }
-      } else if (ver == "ta") {
-        if (unitChoice == "1") {
-          unitTa = "https://api.jsonbin.io/v3/b/67335e43acd3cb34a8a76a66";
-        } else if (unitChoice == "2") {
-          unitTa = "https://api.jsonbin.io/v3/b/67223e84e41b4d34e44b543e";
-        }
-      }
-      if (ver && unitTa) {
-        let key = prompt("Liên hệ: chutuanvu0206\nVui lòng nhập key:");
-        if (key) {
-          fetch(unitTa, {
-            headers: {
-              "X-Access-Key": key,
-            },
-          })
-            .then((response) => {
-              if (!response.ok) {
-                alert("Key không hợp lệ.");
-              }
-              return response.json();
-            })
-            .then((data) => {
-              if (data) {
-                sessionStorage.setItem("cached", JSON.stringify(data));
-                processActivity(data);
-              }
-            });
-        }
-      }
+  let answerData = null;
+  function processActivity(data) {
+    const unitData = data.record.find((item) => item.unit === unit);
+    const activityData = unitData?.activities.find(
+      (item) => item.activity === activity
+    );
+
+    if (unitData && activityData) {
+      answerData = activityData;
+      const keys = {
+        fillin,
+        matching,
+        multipleChoice,
+        wordsearch,
+        essay,
+        draggableJumbledWords,
+        singleUnderline,
+        multipleUnderline,
+        insertAWord,
+        hangman,
+        positionalDragAndDrop,
+        inlineDropDown,
+        firstLetterFillin,
+        dragAndDropCategorisation,
+        dragAndDrop,
+        singleChoice,
+        crossword,
+        audiosubmit,
+      };
+
+      Object.keys(keys).forEach((id) => {
+        document.querySelectorAll(`.${id}`).forEach(() => keys[id]());
+      });
+    } else {
+      alert("Hiện chưa có đáp án cho bài tập này! 😥");
     }
-  });
+  }
+
+  async function fetchAndProcessData() {
+    const key = prompt("Liên hệ: chutuanvu0206\nVui lòng nhập key:");
+    if (!key) return;
+
+    try {
+      const response = await fetch(
+        "https://api.jsonbin.io/v3/b/67b58430acd3cb34a8e7e2d5",
+        {
+          headers: { "X-Access-Key": key },
+        }
+      );
+      if (!response.ok) {
+        alert("Key không hợp lệ.");
+        return;
+      }
+
+      const data = await response.json();
+      sessionStorage.setItem("cached", JSON.stringify(data));
+      processActivity(data);
+    } catch (error) {
+      alert("Opps");
+      console.error(error);
+    }
+  }
 
   function draggableJumbledWords() {
     const queryElements = document.querySelectorAll(".droppableWrapper");
@@ -178,12 +165,12 @@
     }
   }
   function inlineDropDown() {
-    const queryElements = document.querySelectorAll(".activity-select");
-    const queryElementsFt = Array.from(queryElements).filter(
-      (element) => !element.hasAttribute("disabled")
+    const inlineDropDownSelect = document.querySelectorAll(
+      ".activity-select:not([disabled])"
     );
-    queryElementsFt.forEach((id, index) => {
-      id.value = answerData.answer[index];
+    inlineDropDownSelect.forEach((p, i) => {
+      const answer = answerData.answer;
+      p.value = answer[i];
     });
   }
   function firstLetterFillin() {
@@ -196,9 +183,8 @@
     });
   }
   function dragAndDropCategorisation() {
-    const queryElements = document.querySelectorAll(".boxBody");
-    const queryElementsFt = Array.from(queryElements).filter(
-      (element) => !element.hasAttribute("disabled")
+    const queryElementsFt = document.querySelectorAll(
+      ".boxBody:not([disabled])"
     );
     answerData.answer.forEach((id, index) => {
       if (id.trim() !== "") {
@@ -213,13 +199,25 @@
     dragAndDrop();
   }
   function dragAndDrop() {
-    const queryElements = document.querySelectorAll("div.drop:not(.example)");
-    queryElements.forEach((id, index) => {
-      id.appendChild(
-        document.querySelector(`[data-id='${answerData.answer[index]}']`)
+    const dragAndDropDiv = document.querySelectorAll(
+      ".correctAnswer,div.drop:not(.example)"
+    );
+    dragAndDropDiv.forEach((p, i) => {
+      const answer = document.querySelector(
+        `[data-id='${answerData.answer[i]}']`
       );
+      if (answer) {
+        p.appendChild(answer);
+        p.style.minWidth = "26px"; //UI
+        p.style.borderColor = "transparent"; //UI
+      } else {
+        console.warn(
+          `Element with data-id='${answerData.answer[i]}' not found.`
+        );
+      }
     });
   }
+
   function singleChoice() {
     answerData.answer.forEach((value) => {
       document.querySelector(`input[value="${value}"]`).checked = true;
@@ -229,49 +227,39 @@
     singleChoice();
   }
   function hangman() {
-    const queryElements = document.querySelectorAll(
-      'input[autocorrect^="off"]'
+    const hangmanInput = document.querySelectorAll(
+      'input[autocorrect^="off"]:not([disabled]):not(.filled)'
     );
-    const queryElementsFt = Array.from(queryElements).filter(
-      (element) =>
-        !element.hasAttribute("disabled") &&
-        !element.classList.contains("filled")
-    );
-    const AnswerFt = answerData.answer.filter(
+    const answer = answerData.answer.filter(
       (value) => !/^i_\d+--inline_choice--\d+$/.test(value)
     );
-
-    queryElementsFt.forEach((id, index) => {
-      id.value = AnswerFt[index];
+    hangmanInput.forEach((p, i) => {
+      p.value = answer[i];
     });
   }
   function crossword() {
-    const queryElements = document.querySelectorAll(
-      'input[class^="response-RESPONSE_"]'
+    const crosswordInput = document.querySelectorAll(
+      'input[class^="response-RESPONSE_"]:not(.example)'
     );
-    const queryElementsFt = Array.from(queryElements).filter(
-      (element) => !element.classList.contains("example")
-    );
-    queryElementsFt.forEach((id, index) => {
-      id.value = answerData.answer[index];
+    const answer = answerData.answer;
+    crosswordInput.forEach((p, i) => {
+      p.value = answer[i];
     });
   }
   function fillin() {
-    const queryElements = document.querySelectorAll(
-      ".superwideWidth, .wideWidth, .normalWidth, .narrowWidth"
+    const inputResponse = document.querySelectorAll(
+      'input[name*="RESPONSE"]:not([disabled])'
     );
-    const queryElementsFt = Array.from(queryElements).filter(
-      (element) => !element.hasAttribute("disabled")
-    );
-    const AnswersFt = answerData.answer.filter(
+    const answer = answerData.answer.filter(
       (value) =>
         !/^i_\d+--underline--\d+$/.test(value) &&
         !/^i_\d+_RESPONSE_(left|right)_i_\d+--matching--\d+$/.test(value)
     );
-    queryElementsFt.forEach((id, index) => {
-      id.value = AnswersFt[index];
+    inputResponse.forEach((p, i) => {
+      p.value = answer[i];
     });
   }
+
   function essay() {
     const queryElements = document.querySelectorAll("textarea");
     queryElements.forEach((id, index) => {

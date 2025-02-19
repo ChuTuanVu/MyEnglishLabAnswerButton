@@ -25,8 +25,7 @@
 
   if (matching) {
     window.onload = loop;
-  }
-  else {
+  } else {
     loop();
   }
   function loop() {
@@ -35,7 +34,7 @@
       answerFlag = true;
     }
     if (submit && !submitFlag) {
-      submit.click();
+      setTimeout(() => submit.click(), 5000); //Đổi thời gian chuyển bài ở đây
       submitFlag = true;
     }
     if (next && !nextFlag) {
@@ -48,7 +47,9 @@
   }
 
   function open() {
-    const notstarted = document.querySelector('button[data-id="header-state-filter-id--not-started"]');
+    const notstarted = document.querySelector(
+      'button[data-id="header-state-filter-id--not-started"]'
+    );
     const open = document.querySelector(".open-link-cell a");
     if (notstarted && !notStartedFlag) {
       notstarted.click();
@@ -59,5 +60,5 @@
       openFlag = true;
     }
   }
-  setInterval(open, 1000)
+  setInterval(open, 1000);
 })();
