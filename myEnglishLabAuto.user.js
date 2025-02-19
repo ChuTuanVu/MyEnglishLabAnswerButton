@@ -15,13 +15,12 @@
   let submitFlag = false;
   let nextFlag = false;
 
-  let notStartedFlag = false;
-  let openFlag = false;
-
-  const answer = document.getElementById("answer");
   const submit = document.getElementById("submitButton");
   const next = document.getElementById("next");
   const matching = document.querySelector(".matching");
+
+  let notStartedFlag = false;
+  let openFlag = false;
 
   if (matching) {
     window.onload = loop;
@@ -29,6 +28,7 @@
     loop();
   }
   function loop() {
+    const answer = document.getElementById("answer"); //
     if (answer && !answerFlag) {
       answer.click();
       answerFlag = true;
@@ -62,3 +62,5 @@
   }
   setInterval(open, 1000);
 })();
+//TO DO
+// Clean code, change logic

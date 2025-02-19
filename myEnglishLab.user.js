@@ -20,8 +20,8 @@
       answer,
       document.querySelector("#submitButton").parentElement
     );
-  answer.addEventListener("click", async function (event) {
-    event.preventDefault();
+  answer.addEventListener("click", async function (p) {
+    p.preventDefault();
     const cached = sessionStorage.getItem("cached");
 
     if (cached) {
